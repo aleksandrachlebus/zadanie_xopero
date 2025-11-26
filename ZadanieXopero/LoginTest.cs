@@ -1,27 +1,23 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System.Xml.Linq;
+﻿using System.Configuration;
 using ZadanieXopero.PageObjects;
 
 namespace ZadanieXopero
 {
-    public class Tests
+    public class Tests : BaseTest
     {
-        private IWebDriver driver;
+        LoginPage loginPage;
 
         [SetUp]
         public void Setup()
         {
-            driver = new ChromeDriver();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+            loginPage = new LoginPage(driver);
         }
 
         [Test]
         public void LoginCorrectCredentialsTest()
         {
-            LoginPage loginPage = new LoginPage(driver);
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
+            string loginPageUrl = ConfigurationManager.AppSettings["Url"];
+            driver.Navigate().GoToUrl(loginPageUrl);
             loginPage.LogIn("standard_user", "secret_sauce");
             Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/inventory.html")); 
         }
@@ -29,7 +25,6 @@ namespace ZadanieXopero
         [Test]
         public void LoginWrongPasswordTest()
         {
-            LoginPage loginPage = new LoginPage(driver);
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("standard_user", "wrong_password");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username and password do not match any user in this service"));
@@ -39,7 +34,6 @@ namespace ZadanieXopero
         [Test]
         public void LoginEmptyPasswordTest()
         {
-            LoginPage loginPage = new LoginPage(driver);
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("standard_user", "");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Password is required"));
@@ -49,7 +43,6 @@ namespace ZadanieXopero
         [Test]
         public void LoginEmptyUserTest()
         {
-            LoginPage loginPage = new LoginPage(driver);
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("", "secret_sauce");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username is required"));
@@ -59,16 +52,10 @@ namespace ZadanieXopero
         [Test]
         public void LoginNotExistingUserTest()
         {
-            LoginPage loginPage = new LoginPage(driver);
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("not_existing_user", "secret_sauce");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username and password do not match any user in this service"));
             Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/"));
-        }
-
-        [TearDown]
-        public void TearDown() {
-            driver.Quit(); 
         }
     }
 }

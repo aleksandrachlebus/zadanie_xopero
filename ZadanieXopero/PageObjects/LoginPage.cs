@@ -1,8 +1,5 @@
 ﻿using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ZadanieXopero.PageObjects
 {
@@ -28,7 +25,7 @@ namespace ZadanieXopero.PageObjects
             PageFactory.InitElements(driver, this);
         }
 
-        public IWebElement Error { get => error; set => error = value; } //seter potrzebny?
+        public IWebElement Error { get => error; }
 
         public void LogIn(string user, string pwd)
         {
