@@ -25,8 +25,9 @@ namespace ZadanieXopero
         public void AddProductToCartTest()
         {
             allureReport.LogStep("Add Product To Cart Test");
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
-            loginPage.LogIn("standard_user", "secret_sauce");
+            userCredentials = GetUserCredentials("LoginCorrectCredentialsTestData");
+            driver.Navigate().GoToUrl(urls.loginPageUrl);
+            loginPage.LogIn(userCredentials.User, userCredentials.Password);
             productsPage.GoToCart();
             cartPage.CleanCart();
             cartPage.ContinueShopping();
@@ -46,8 +47,9 @@ namespace ZadanieXopero
         public void ShoppingProcessTest() 
         {
             allureReport.LogStep("Shopping Process Test");
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
-            loginPage.LogIn("standard_user", "secret_sauce");
+            userCredentials = GetUserCredentials("LoginCorrectCredentialsTestData");
+            driver.Navigate().GoToUrl(urls.loginPageUrl);
+            loginPage.LogIn(userCredentials.User, userCredentials.Password);
             productsPage.GoToCart();
             cartPage.CleanCart();
             cartPage.ContinueShopping();

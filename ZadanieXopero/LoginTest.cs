@@ -1,5 +1,4 @@
 ﻿using Allure.NUnit;
-using System.Configuration;
 using ZadanieXopero.PageObjects;
 
 namespace ZadanieXopero
@@ -19,51 +18,54 @@ namespace ZadanieXopero
         public void LoginCorrectCredentialsTest()
         {
             allureReport.LogStep("Login With Correct Credentials Test");
-            //string loginPageUrl = ConfigurationManager.AppSettings["Url"];
-            //driver.Navigate().GoToUrl(loginPageUrl);
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
-            loginPage.LogIn("standard_user", "secret_sauce");
-            Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/inventory.html")); 
+            userCredentials = GetUserCredentials("LoginCorrectCredentialsTestData");
+            driver.Navigate().GoToUrl(urls.loginPageUrl);
+            loginPage.LogIn(userCredentials.User, userCredentials.Password);
+            Assert.That(driver.Url, Is.EqualTo(urls.productsPageUrl)); 
         }
 
         [Test]
         public void LoginWrongPasswordTest()
         {
             allureReport.LogStep("Login With Wrong Password Test");
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
-            loginPage.LogIn("standard_user", "wrong_password");
+            userCredentials = GetUserCredentials("LoginWrongPasswordTestData");
+            driver.Navigate().GoToUrl(urls.loginPageUrl);
+            loginPage.LogIn(userCredentials.User, userCredentials.Password);
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username and password do not match any user in this service"));
-            Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/"));
+            Assert.That(driver.Url, Is.EqualTo(urls.loginPageUrl));
         }
 
         [Test]
         public void LoginEmptyPasswordTest()
         {
             allureReport.LogStep("Login With Empty Password Test");
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
-            loginPage.LogIn("standard_user", "");
+            userCredentials = GetUserCredentials("LoginEmptyPasswordTestData");
+            driver.Navigate().GoToUrl(urls.loginPageUrl);
+            loginPage.LogIn(userCredentials.User, userCredentials.Password);
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Password is required"));
-            Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/"));
+            Assert.That(driver.Url, Is.EqualTo(urls.loginPageUrl));
         }
 
         [Test]
         public void LoginEmptyUserTest()
         {
             allureReport.LogStep("Login With Empty User Test");
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
-            loginPage.LogIn("", "secret_sauce");
+            userCredentials = GetUserCredentials("LoginEmptyUserTestData");
+            driver.Navigate().GoToUrl(urls.loginPageUrl);
+            loginPage.LogIn(userCredentials.User, userCredentials.Password);
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username is required"));
-            Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/"));
+            Assert.That(driver.Url, Is.EqualTo(urls.loginPageUrl));
         }
 
         [Test]
         public void LoginNotExistingUserTest()
         {
             allureReport.LogStep("Login With Not Existing User Test");
-            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
-            loginPage.LogIn("not_existing_user", "secret_sauce");
+            userCredentials = GetUserCredentials("LoginNotExistingUserTestData");
+            driver.Navigate().GoToUrl(urls.loginPageUrl);
+            loginPage.LogIn(userCredentials.User, userCredentials.Password);
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username and password do not match any user in this service"));
-            Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/"));
+            Assert.That(driver.Url, Is.EqualTo(urls.loginPageUrl));
         }
     }
 }
