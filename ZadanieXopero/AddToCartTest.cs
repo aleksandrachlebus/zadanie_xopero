@@ -1,9 +1,10 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+﻿using Allure.NUnit;
+using OpenQA.Selenium;
 using ZadanieXopero.PageObjects;
 
 namespace ZadanieXopero
 {
+    [AllureNUnit]
     internal class AddToCartTest : BaseTest
     {
         LoginPage loginPage;
@@ -23,6 +24,7 @@ namespace ZadanieXopero
         [Test]
         public void AddProductToCartTest()
         {
+            allureReport.LogStep("Add Product To Cart Test");
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("standard_user", "secret_sauce");
             productsPage.GoToCart();
@@ -43,6 +45,7 @@ namespace ZadanieXopero
         [Test]
         public void ShoppingProcessTest() 
         {
+            allureReport.LogStep("Shopping Process Test");
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("standard_user", "secret_sauce");
             productsPage.GoToCart();

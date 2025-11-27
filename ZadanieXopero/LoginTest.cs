@@ -1,8 +1,10 @@
-﻿using System.Configuration;
+﻿using Allure.NUnit;
+using System.Configuration;
 using ZadanieXopero.PageObjects;
 
 namespace ZadanieXopero
 {
+    [AllureNUnit]
     public class Tests : BaseTest
     {
         LoginPage loginPage;
@@ -16,8 +18,10 @@ namespace ZadanieXopero
         [Test]
         public void LoginCorrectCredentialsTest()
         {
-            string loginPageUrl = ConfigurationManager.AppSettings["Url"];
-            driver.Navigate().GoToUrl(loginPageUrl);
+            allureReport.LogStep("Login With Correct Credentials Test");
+            //string loginPageUrl = ConfigurationManager.AppSettings["Url"];
+            //driver.Navigate().GoToUrl(loginPageUrl);
+            driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("standard_user", "secret_sauce");
             Assert.That(driver.Url, Is.EqualTo("https://www.saucedemo.com/inventory.html")); 
         }
@@ -25,6 +29,7 @@ namespace ZadanieXopero
         [Test]
         public void LoginWrongPasswordTest()
         {
+            allureReport.LogStep("Login With Wrong Password Test");
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("standard_user", "wrong_password");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username and password do not match any user in this service"));
@@ -34,6 +39,7 @@ namespace ZadanieXopero
         [Test]
         public void LoginEmptyPasswordTest()
         {
+            allureReport.LogStep("Login With Empty Password Test");
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("standard_user", "");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Password is required"));
@@ -43,6 +49,7 @@ namespace ZadanieXopero
         [Test]
         public void LoginEmptyUserTest()
         {
+            allureReport.LogStep("Login With Empty User Test");
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("", "secret_sauce");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username is required"));
@@ -52,6 +59,7 @@ namespace ZadanieXopero
         [Test]
         public void LoginNotExistingUserTest()
         {
+            allureReport.LogStep("Login With Not Existing User Test");
             driver.Navigate().GoToUrl("https://www.saucedemo.com/");
             loginPage.LogIn("not_existing_user", "secret_sauce");
             Assert.That(loginPage.Error.Text, Is.EqualTo("Epic sadface: Username and password do not match any user in this service"));
