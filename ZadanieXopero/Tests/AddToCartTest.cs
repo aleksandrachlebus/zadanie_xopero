@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using ZadanieXopero.PageObjects;
 
-namespace ZadanieXopero
+namespace ZadanieXopero.Tests
 {
     [AllureNUnit]
     internal class AddToCartTest : BaseTest

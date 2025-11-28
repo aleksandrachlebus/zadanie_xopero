@@ -1,4 +1,4 @@
-﻿namespace ZadanieXopero
+﻿namespace ZadanieXopero.DTO
 {
     public class UserCredentialsData
     {

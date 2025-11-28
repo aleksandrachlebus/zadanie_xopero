@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using ZadanieXopero.DTO;
 using ZadanieXopero.Reports;
 
-namespace ZadanieXopero
+namespace ZadanieXopero.Tests
 {
     public abstract class BaseTest
     {

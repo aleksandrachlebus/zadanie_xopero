@@ -1,10 +1,10 @@
 ﻿using Allure.NUnit;
 using ZadanieXopero.PageObjects;
 
-namespace ZadanieXopero
+namespace ZadanieXopero.Tests
 {
     [AllureNUnit]
-    public class Tests : BaseTest
+    public class LoginTests : BaseTest
     {
         LoginPage loginPage;
 
