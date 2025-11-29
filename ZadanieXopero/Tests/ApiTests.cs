@@ -5,19 +5,20 @@ using ZadanieXopero.DTO;
 namespace ZadanieXopero.Tests
 {
     [TestFixture]
+    [Category("API")]
     public class ApiTests
     {
         private const string BASE_URL = "https://reqres.in/";
         private string projectLocation = Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("ZadanieXopero"));
         private string testDataPath = "\\ZadanieXopero\\TestData\\";
 
-        [Test]
-        public void GetUserMethodTest() {
+        [TestCase("2")]
+        public void GetUserMethodTest(string id) {
 
             RestClient client = new RestClient(BASE_URL);
 
             RestRequest getRequest = new RestRequest("api/users/{id}", Method.Get);
-            getRequest.AddUrlSegment("id", 2);
+            getRequest.AddUrlSegment("id", id);
             getRequest.AddHeader("Accept", "application/json");
             getRequest.AddHeader("x-api-key", "reqres-free-v1");
 
@@ -29,13 +30,13 @@ namespace ZadanieXopero.Tests
             Assert.That(user.data.firstName, Is.EqualTo("Janet"));
         }
 
-        [Test]
-        public void PutUserMethodTest()
+        [TestCase("3")]
+        public void PutUserMethodTest(string id)
         {
             RestClient client = new RestClient(BASE_URL);
 
             RestRequest putRequest = new RestRequest("api/users/{id}", Method.Put);
-            putRequest.AddUrlSegment("id", 2);
+            putRequest.AddUrlSegment("id", id);
             putRequest.AddHeader("Accept", "application/json");
             putRequest.AddHeader("Content-Type", "application/json");
             putRequest.AddHeader("x-api-key", "reqres-free-v1");
@@ -52,29 +53,18 @@ namespace ZadanieXopero.Tests
             Assert.That(user.password, Is.EqualTo("password"));
         }
 
-        [Test]
-        public void DeleteUserMethodTest()
+        [TestCase("5", "reqres-free-v1", "NoContent")]
+        [TestCase("5", "wrong-key", "Forbidden")]
+        public void DeleteUserMethodTest(string id, string apiKeyValue, string responseStatus)
         {
             RestClient client = new RestClient(BASE_URL);
             RestRequest deleteRequest = new RestRequest("api/users/{id}", Method.Delete);
-            deleteRequest.AddUrlSegment("id", 5);
+            deleteRequest.AddUrlSegment("id", id);
             deleteRequest.AddHeader("Accept", "application/json");
-            deleteRequest.AddHeader("x-api-key", "reqres-free-v1");
+            deleteRequest.AddHeader("x-api-key", apiKeyValue);
 
             RestResponse response = client.Execute(deleteRequest);
-            Assert.That(response.StatusCode.ToString, Is.EqualTo("NoContent"));
-        }
-
-        [Test]
-        public void UnauthorisedUserTest()
-        {
-            RestClient client = new RestClient(BASE_URL);
-            RestRequest deleteRequest = new RestRequest("api/users/{id}", Method.Delete);
-            deleteRequest.AddUrlSegment("id", 5);
-            deleteRequest.AddHeader("Accept", "application/json");
-
-            RestResponse response = client.Execute(deleteRequest);
-            Assert.That(response.StatusCode.ToString, Is.EqualTo("Unauthorized"));
+            Assert.That(response.StatusCode.ToString, Is.EqualTo(responseStatus));
         }
     }
 }

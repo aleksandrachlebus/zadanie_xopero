@@ -4,6 +4,8 @@ using ZadanieXopero.PageObjects;
 namespace ZadanieXopero.Tests
 {
     [AllureNUnit]
+    [TestFixture]
+    [Category("UI")]
     public class LoginTests : BaseTest
     {
         LoginPage loginPage;

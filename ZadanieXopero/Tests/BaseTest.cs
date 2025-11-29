@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.Text.Json;
 using ZadanieXopero.DTO;
 using ZadanieXopero.Reports;
 
@@ -31,15 +31,15 @@ namespace ZadanieXopero.Tests
         protected UserCredentialsData GetUserCredentials(string fileName) 
         {
             using StreamReader reader = new(projectLocation + testDataPath + fileName + ".json");
-            var json = reader.ReadToEnd();
-            return JsonConvert.DeserializeObject<UserCredentialsData>(json);
+            String json = reader.ReadToEnd();
+            return JsonSerializer.Deserialize<UserCredentialsData>(json);
         }
 
         protected UrlsData GetApplicationUrls()
         {
             using StreamReader reader = new(projectLocation + testDataPath + urlsTestDataFileName + ".json");
-            var json = reader.ReadToEnd();
-            return JsonConvert.DeserializeObject<UrlsData>(json);
+            String json = reader.ReadToEnd();
+            return JsonSerializer.Deserialize<UrlsData>(json);
         }
 
         [TearDown]
