@@ -8,8 +8,8 @@ namespace ZadanieXopero.Tests
     public class ApiTests
     {
         private const string BASE_URL = "https://reqres.in/";
-        string projectLocation = Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("ZadanieXopero"));
-        protected string testDataPath = "\\ZadanieXopero\\TestData\\";
+        private string projectLocation = Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("ZadanieXopero"));
+        private string testDataPath = "\\ZadanieXopero\\TestData\\";
 
         [Test]
         public void GetUserMethodTest() {
@@ -63,6 +63,18 @@ namespace ZadanieXopero.Tests
 
             RestResponse response = client.Execute(deleteRequest);
             Assert.That(response.StatusCode.ToString, Is.EqualTo("NoContent"));
+        }
+
+        [Test]
+        public void UnauthorisedUserTest()
+        {
+            RestClient client = new RestClient(BASE_URL);
+            RestRequest deleteRequest = new RestRequest("api/users/{id}", Method.Delete);
+            deleteRequest.AddUrlSegment("id", 5);
+            deleteRequest.AddHeader("Accept", "application/json");
+
+            RestResponse response = client.Execute(deleteRequest);
+            Assert.That(response.StatusCode.ToString, Is.EqualTo("Unauthorized"));
         }
     }
 }

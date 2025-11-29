@@ -8,13 +8,13 @@ namespace ZadanieXopero.Tests
 {
     public abstract class BaseTest
     {
-        public IWebDriver driver;
+        protected IWebDriver driver;
         protected AllureReport allureReport;
-        string projectLocation = Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("ZadanieXopero"));
-        protected string testDataPath = "\\ZadanieXopero\\TestData\\";
-        protected const string urlsTestDataFileName = "UrlsTestData";
-        public UrlsData urls;
-        public UserCredentialsData userCredentials;
+        protected UrlsData urls;
+        protected UserCredentialsData userCredentials;
+        private string projectLocation = Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("ZadanieXopero"));
+        private const string testDataPath = "\\ZadanieXopero\\TestData\\";
+        private const string urlsTestDataFileName = "UrlsTestData";
 
         [SetUp]
         public void Setup()
@@ -24,18 +24,18 @@ namespace ZadanieXopero.Tests
             //Remove below comment to run in headless mode
             //chromeOptions.AddArguments("--headless");
             driver = new ChromeDriver(chromeOptions);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
             urls = GetApplicationUrls();
         }
 
-        public UserCredentialsData GetUserCredentials(string fileName) 
+        protected UserCredentialsData GetUserCredentials(string fileName) 
         {
             using StreamReader reader = new(projectLocation + testDataPath + fileName + ".json");
             var json = reader.ReadToEnd();
             return JsonConvert.DeserializeObject<UserCredentialsData>(json);
         }
 
-        public UrlsData GetApplicationUrls()
+        protected UrlsData GetApplicationUrls()
         {
             using StreamReader reader = new(projectLocation + testDataPath + urlsTestDataFileName + ".json");
             var json = reader.ReadToEnd();
@@ -43,7 +43,7 @@ namespace ZadanieXopero.Tests
         }
 
         [TearDown]
-        public void TearDown()
+        protected void TearDown()
         {
             driver.Close();
         }

@@ -2,7 +2,7 @@
 {
     public class UrlsData
     {
-        public string loginPageUrl;
-        public string productsPageUrl;
+        public string loginPageUrl { get; set; }
+        public string productsPageUrl { get; set; }
     }
 }

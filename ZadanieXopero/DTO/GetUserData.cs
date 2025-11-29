@@ -2,7 +2,7 @@
 
 namespace ZadanieXopero.DTO
 {
-    internal class GetUserData
+    public class GetUserData
     {
         public int id { get; set; }
         public string email { get; set; }

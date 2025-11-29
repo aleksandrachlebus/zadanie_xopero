@@ -1,16 +1,15 @@
 ﻿using Allure.NUnit;
-using OpenQA.Selenium;
+using ZadanieXopero.DTO;
 using ZadanieXopero.PageObjects;
 
 namespace ZadanieXopero.Tests
 {
     [AllureNUnit]
-    internal class AddToCartTest : BaseTest
+    public class AddToCartTest : BaseTest
     {
         LoginPage loginPage;
         ProductsPage productsPage;
         CartPage cartPage;
-        CheckoutStepOnePage checkoutPage;
 
         [SetUp]
         public void Setup()
@@ -18,7 +17,6 @@ namespace ZadanieXopero.Tests
             loginPage = new LoginPage(driver);
             cartPage = new CartPage(driver);
             productsPage = new ProductsPage(driver);
-            checkoutPage = new CheckoutStepOnePage(driver);
         }
 
         [Test]
@@ -36,29 +34,18 @@ namespace ZadanieXopero.Tests
             Assert.That(productsPage.getAmountOfProductsInCart(), Is.EqualTo("1"));
 
             productsPage.GoToCart();
-            Assert.That(driver.FindElement(By.CssSelector("div.cart_item:nth-child(3) > div:nth-child(1)")).Text, Is.EqualTo("1"));
-            Assert.That(driver.FindElement(By.CssSelector("#item_4_title_link > div:nth-child(1)")).Text, Is.EqualTo("Sauce Labs Backpack"));
-            Assert.That(driver.FindElement(By.CssSelector("div.cart_item:nth-child(3) > div:nth-child(2) > div:nth-child(2)")).Text,
-                Is.EqualTo("carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection."));
-            Assert.That(driver.FindElement(By.CssSelector("div.cart_item:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1)")).Text.Contains("29.99"));
-        }
+            
+            List<Product> productsList = cartPage.GetProductsInCart();
+            Assert.That(productsList.Count, Is.EqualTo(1));
 
-        [Test]
-        public void ShoppingProcessTest() 
-        {
-            allureReport.LogStep("Shopping Process Test");
-            userCredentials = GetUserCredentials("LoginCorrectCredentialsTestData");
-            driver.Navigate().GoToUrl(urls.loginPageUrl);
-            loginPage.LogIn(userCredentials.User, userCredentials.Password);
-            productsPage.GoToCart();
-            cartPage.CleanCart();
-            cartPage.ContinueShopping();
-
-            productsPage.addSauceLabsBackpacke();
-            productsPage.addSauceLabsBikeLight();
-            productsPage.GoToCart();
-            cartPage.CheckoutShopping();
-            checkoutPage.ProvideCustomerDataAndContinue("Jan", "Kowalski", "11-111");
+            Assert.That(productsList[0].quantity, Is.EqualTo(1));
+            Assert.That(productsList[0].name, Is.EqualTo("Sauce Labs Backpack"));
+            Assert.That(productsList[0].description, Is.EqualTo(
+                "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection."));
+            Assert.That(productsList[0].price, Is.EqualTo("$29.99"));
+            Assert.That(cartPage.removeSauceLabsBackpacke.Enabled);
+            Assert.That(cartPage.continueShopping.Enabled);
+            Assert.That(cartPage.checkout.Enabled);
         }
     }
 }

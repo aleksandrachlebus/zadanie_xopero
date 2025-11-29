@@ -2,7 +2,7 @@
 {
     public class UserCredentialsData
     {
-        public String User;
-        public String Password; 
+        public String User { get; set; }
+        public String Password { get; set; }
     }
 }

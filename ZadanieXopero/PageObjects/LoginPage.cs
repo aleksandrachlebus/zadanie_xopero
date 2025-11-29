@@ -9,13 +9,10 @@ namespace ZadanieXopero.PageObjects
 
         [FindsBy(How = How.Id, Using = "user-name")]
         private IWebElement userName;
-
         [FindsBy(How = How.Id, Using = "password")]
         private IWebElement password;
-
         [FindsBy(How = How.Id, Using = "login-button")]
         private IWebElement loginButton;
-
         [FindsBy(How = How.CssSelector, Using = "[data-test='error']")]
         private IWebElement error;
 

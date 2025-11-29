@@ -1,6 +1,6 @@
 ﻿namespace ZadanieXopero.DTO
 {
-    internal class GetUser
+    public class GetUser
     {
         public GetUserData data { get; set; }
     }

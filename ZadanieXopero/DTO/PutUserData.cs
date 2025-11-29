@@ -1,6 +1,6 @@
 ﻿namespace ZadanieXopero.DTO
 {
-    internal class PutUserData
+    public class PutUserData
     {
         public string username { get; set; }
         public string email { get; set; }

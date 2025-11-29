@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
+using ZadanieXopero.DTO;
 
 namespace ZadanieXopero.PageObjects
 {
@@ -7,29 +8,24 @@ namespace ZadanieXopero.PageObjects
     {
         IWebDriver driver;
 
+        [FindsBy(How = How.CssSelector, Using = "[data-test='inventory-item']")]
+        public IList<IWebElement> productsHtmlList;
         [FindsBy(How = How.Id, Using = "remove-sauce-labs-backpack")]
-        private IWebElement removeSauceLabsBackpacke;
-
+        public IWebElement removeSauceLabsBackpacke;
         [FindsBy(How = How.Id, Using = "remove-sauce-labs-bike-light")]
-        private IWebElement removeSauceLabsBikeLight;
-
+        public IWebElement removeSauceLabsBikeLight;
         [FindsBy(How = How.Id, Using = "remove-sauce-labs-bolt-t-shirt")]
-        private IWebElement removeSauceLabsBoltTShirt;
-
+        public IWebElement removeSauceLabsBoltTShirt;
         [FindsBy(How = How.Id, Using = "remove-sauce-labs-fleece-jacket")]
-        private IWebElement removeSauceLabsFleeceJacket;
-
+        public IWebElement removeSauceLabsFleeceJacket;
         [FindsBy(How = How.Id, Using = "remove-sauce-labs-onesie")]
-        private IWebElement removeSauceLabsOnesie;
-
+        public IWebElement removeSauceLabsOnesie;
         [FindsBy(How = How.Id, Using = "remove-test.allthethings()-t-shirt-(red)")]
-        private IWebElement removeTestAllTheThingsTShirtRed;
-
+        public IWebElement removeTestAllTheThingsTShirtRed;
         [FindsBy(How = How.Id, Using = "checkout")]
-        private IWebElement checkout;
-
+        public IWebElement checkout;
         [FindsBy(How = How.Id, Using = "continue-shopping")]
-        private IWebElement continueShopping;
+        public IWebElement continueShopping;
 
         public CartPage(IWebDriver driver)
         {
@@ -61,6 +57,20 @@ namespace ZadanieXopero.PageObjects
             try { removeTestAllTheThingsTShirtRed.Click(); }
             catch (NoSuchElementException e)
             { Console.WriteLine($"Product AllTheThingsTShirtRed was not in a cart. {e.Message}"); }
+        }
+        public List<Product> GetProductsInCart()
+        {
+            List<Product> productsList = new List<Product>();
+            foreach (IWebElement productHtml in productsHtmlList)
+            {
+                int quantity = Int32.Parse(productHtml.FindElement(By.CssSelector("[data-test='item-quantity']")).Text);
+                String productName = productHtml.FindElement(By.CssSelector("[data-test='inventory-item-name']")).Text;
+                String productDescription = productHtml.FindElement(By.CssSelector("[data-test='inventory-item-desc']")).Text;
+                String productPrice = productHtml.FindElement(By.CssSelector("[data-test='inventory-item-price']")).Text;
+                Product product = new Product(quantity, productName, productDescription, productPrice);
+                productsList.Add(product);
+            }
+            return productsList;
         }
 
         public void ContinueShopping()
